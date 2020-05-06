@@ -4,7 +4,6 @@
     <title>generator</title>
 </head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<body class="bg">
 <script type="text/javascript">
   function areaCodes() {
     let areaCode = {};
@@ -3637,7 +3636,7 @@
   function generate() {
     document.getElementById("table").hidden = false;
     document.getElementById("detailContainer").hidden = true;
-    document.getElementById("tableGeneCon").hidden = true;
+    document.getElementById("tableGenerateCon").hidden = true;
     document.getElementById("a").innerText = generateIDCard()
     document.getElementById("b").innerText = generateIDCard()
     document.getElementById("c").innerText = generateIDCard()
@@ -3655,7 +3654,7 @@
   function queryOwnership() {
     //归属地可见
     document.getElementById("table").hidden = true;
-    document.getElementById("tableGeneCon").hidden = true;
+    document.getElementById("tableGenerateCon").hidden = true;
     document.getElementById("detailContainer").hidden = false;
 
     //隐藏结果和错误提示
@@ -3664,10 +3663,9 @@
   }
 
   function showGenerate() {
-//归属地可见
     document.getElementById("table").hidden = true;
     document.getElementById("detailContainer").hidden = true;
-    document.getElementById("tableGeneCon").hidden = false;
+    document.getElementById("tableGenerateCon").hidden = false;
     // document.getElementById("tableGenerate").hidden = true;
   }
 
@@ -7393,7 +7391,7 @@
     } else if (province) {
       areaCode = randomAreaCodeByArea(province);
     } else {
-      areaCode = randomCode();
+      areaCode = randomAreaCode();
     }
     // let areaCode = district ? district : randomAreaCode();
     let birthDay = randomBirthday();
@@ -7448,21 +7446,94 @@
     document.getElementById("wx").innerText = generateSpecial()
   }
 
+  onKeyDown = () => {
+    let event = window.event ? window.event : event;
+    if (event.keyCode === 13) {
+      queryFullArea()
+    }
+  }
+
   window.onload = function () {
     initSeletList();
     geneYear()
+    document.getElementById("tableGenerateCon").hidden = false;
   };
 
 </script>
+
+<body class="bg">
 <h1 align="center" class="marginTop:100px">
     <font color="black" face="华文楷体" size="10">IDCard </font>
 </h1>
 <div class="container">
+    <button class="button" onclick="showGenerate()">条件生成</button>
     <button class="button" onclick="generate()">随机身份证</button>
     <button class="button" onclick="queryOwnership()">归属地查询</button>
-    <button class="button" onclick="showGenerate()">条件生成</button>
 </div>
-
+<div id="tableGenerateCon" hidden="true">
+    <div align="center" class="areaSelect">
+        <div class="first">
+            <span class="span">出生地</span>
+            <div class="firstRight">
+                <select id="province" class="selectStyle" onchange="changeSelect(this);">
+                    <option value="">-请选择省-</option>
+                </select>
+                <select class="selectStyle" id="city" onchange="changeSelect(this);">
+                    <option value="">-请选择市-</option>
+                </select>
+                <select class="selectStyle" id="district">
+                    <option value="">-请选区-</option>
+                </select>
+            </div>
+        </div>
+        <div class="first">
+            <span class="span">生日</span>
+            <div class="firstRight">
+                <select class="selectStyle" class="secondItem" id="year">
+                    <option value="">-年-</option>
+                </select>
+                <select class="selectStyle" class="secondItem" id="month">
+                    <option value="">-月-</option>
+                </select>
+                <select class="selectStyle" class="secondItem" id="day">
+                    <option value="">-日-</option>
+                </select>
+            </div>
+        </div>
+        <div class="first">
+            <span class="span">性别</span>
+            <div class="firstRight">
+                <select class="selectStyle" class="secondItem" id="sexual">
+                    <option value="man">男</option>
+                    <option value="woman">女</option>
+                </select>
+            </div>
+        </div>
+        <button onclick="batchGenerateSpecial()" class="generatorSpecial">生成</button>
+        <table class="table1" id="tableGenerate" hidden="true" align="center" border="1" width="90%" height="250">
+            <tr>
+                <th align="center" id="ab"/>
+                <th align="center" id="cd"/>
+                <th align="center" id="ef"/>
+            </tr>
+            <tr>
+                <th align="center" id="gh"/>
+                <th align="center" id="ij"/>
+                <th align="center" id="kl"/>
+            </tr>
+            <tr>
+                <th align="center" id="mn"/>
+                <th align="center" id="op"/>
+                <th align="center" id="qr"/>
+            </tr>
+            <tr>
+                <th align="center" id="st"/>
+                <th align="center" id="uv"/>
+                <th align="center" id="wx"/>
+            </tr>
+        </table>
+    </div>
+</div>
 <table class="table1" id="table" hidden="true" align="center" border="1" width="90%" height="250">
     <tr>
         <th align="center" id="a"/>
@@ -7489,7 +7560,7 @@
     <div class="searchCon">
         <p class="searchTitle">身份证号归属地查询</p>
         <div class="inputCon">
-            <input id="input" class="input" placeholder="请输入18位身份证号">
+            <input id="input" onkeydown="onKeyDown()" class="input" placeholder="请输入18位身份证号">
             <button onclick="queryFullArea()" class="searchButton">查询</button>
         </div>
     </div>
@@ -7513,76 +7584,52 @@
         </tr>
     </table>
 </div>
-<div id="tableGeneCon" hidden="true" align="center" class="areaSelect">
-    <div class="first">
-        <select id="province" onchange="changeSelect(this);">
-            <option value="">-请选择省-</option>
-        </select>
-        <select id="city" onchange="changeSelect(this);">
-            <option value="">-请选择市-</option>
-        </select>
-        <select id="district">
-            <option value="">-请选区-</option>
-        </select>
-    </div>
-    <div class="second">
-        <select class="secondItem" id="year">
-            <option value="">-年-</option>
-        </select>
-        <select class="secondItem" id="month">
-            <option value="">-月-</option>
-        </select>
-        <select class="secondItem" id="day">
-            <option value="">-日-</option>
-        </select>
-        <select class="secondItem" id="sexual">
-            <option value="man">男</option>
-            <option value="woman">女</option>
-        </select>
-    </div>
-    <button onclick="batchGenerateSpecial()" class="generatorSpecial">生成</button>
-    <table class="table1" id="tableGenerate" hidden="true" align="center" border="1" width="90%" height="250">
-        <tr>
-            <th align="center" id="ab"/>
-            <th align="center" id="cd"/>
-            <th align="center" id="ef"/>
-        </tr>
-        <tr>
-            <th align="center" id="gh"/>
-            <th align="center" id="ij"/>
-            <th align="center" id="kl"/>
-        </tr>
-        <tr>
-            <th align="center" id="mn"/>
-            <th align="center" id="op"/>
-            <th align="center" id="qr"/>
-        </tr>
-        <tr>
-            <th align="center" id="st"/>
-            <th align="center" id="uv"/>
-            <th align="center" id="wx"/>
-        </tr>
-    </table>
-</div>
 </body>
 <style>
-    .generatorSpecial {
-        margin-top: 8px;
-        width: 200px;
-        height: 35px;
+
+    .selectStyle {
+        height: 38px;
+        font-size: 16px;
     }
 
-    .second {
-        margin-top: 10px;
-    }
-
-    .second .secondItem {
-        margin: 0 8px;
-        width: 60px;
-        height: 25px;
+    .first {
+        min-width: 33%;
+        margin-top: 20px;
+        display: flex;
+        flex-direction: row;
         align-items: center;
-        justify-content: center;
+        justify-content: start;
     }
+
+    .firstRight {
+        margin-left: 10px;
+    }
+
+    .span {
+        font-size: 20px;
+        width: 80px;
+    }
+
+    .generatorSpecial {
+        width: 150px;
+        background-color: palevioletred;
+        border-radius: 6px;
+        height: 45px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    /*.second {*/
+    /*    margin-top: 10px;*/
+    /*}*/
+    /**/
+    /*.second .secondItem {*/
+    /*    margin: 0 8px;*/
+    /*    width: 60px;*/
+    /*    height: 25px;*/
+    /*    align-items: center;*/
+    /*    justify-content: center;*/
+    /*}*/
 
     .errorTxt {
         /*background-color: white;*/
@@ -7603,10 +7650,13 @@
     }
 
     .button {
-        background-color: aquamarine;
+        color: white;
+        border-radius: 5px;
+        background-color: sienna;
         margin: 2px 60px 20px 0;
         width: 100px;
         height: 40px;
+        cursor: pointer;
     }
 
     .container {
@@ -7641,6 +7691,7 @@
         width: 100px;
         height: 100%;
         background-color: forestgreen;
+        cursor: pointer;
     }
 
     .searchCon {
@@ -7656,7 +7707,9 @@
     }
 
     .areaSelect {
-        margin-top: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
 </style>
