@@ -7343,7 +7343,8 @@
 
 
   function geneYear() {
-    for (let i = 2019; i > 1940; i--) {
+    let year = new Date().getFullYear();
+    for (let i = year - 1; i > 1940; i--) {
       let obj = document.getElementById("year");
       obj.options.add(new Option(i, i))
     }
